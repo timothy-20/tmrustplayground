@@ -7,15 +7,10 @@
 /// let mut cache = Cache::new(|value| value + 10);
 ///
 /// assert_eq!(15, cache.value(5)); // 값이 일치합니다.
-/// assert_eq!(20, cache.value(10)); // 값이 일치하지 않습니다. 이미 초기 계산 결과가 있으므로 캐시된 값을 반환합니다.
+/// assert_ne!(20, cache.value(10)); // 값이 일치하지 않습니다. 이미 초기 계산 결과가 있으므로 캐시된 값을 반환합니다.
 /// ```
 ///
-/// # Panics
-///
-/// # Errors
-///
-/// # Safety
-///
+
 pub struct Cache<T>
     where T: Fn(u32) -> u32 {
     calculate: T,
@@ -43,19 +38,3 @@ impl<T> Cache<T>
         }
     }
 }
-
-// impl<T> Iterator for Cache<T>
-//     where T: Fn(u32) -> u32 {
-//     type Item = u32;
-//
-//     fn next(&mut self) -> Option<Self::Item> {
-//         let value = self.value.unwrap_or_else(|| 0);
-//         let new_value = self.value(value);
-//
-//         if new_value == 0 {
-//             None
-//         } else {
-//             Some(new_value)
-//         }
-//     }
-// }
