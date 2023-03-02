@@ -1,4 +1,22 @@
-struct Cache<T>
+/// 계산에 대한 동작을 설정하고 반환 값을 캐시하는 구조체입니다.
+///
+///  # Example
+/// ``` rust
+/// use tmrustplayground::cache::Cache;
+///
+/// let mut cache = Cache::new(|value| value + 10);
+///
+/// assert_eq!(15, cache.value(5)); // 값이 일치합니다.
+/// assert_eq!(20, cache.value(10)); // 값이 일치하지 않습니다. 이미 초기 계산 결과가 있으므로 캐시된 값을 반환합니다.
+/// ```
+///
+/// # Panics
+///
+/// # Errors
+///
+/// # Safety
+///
+pub struct Cache<T>
     where T: Fn(u32) -> u32 {
     calculate: T,
     value: Option<u32>,
@@ -6,14 +24,14 @@ struct Cache<T>
 
 impl<T> Cache<T>
     where T: Fn(u32) -> u32 {
-    fn new(calculate: T) -> Self<T> {
+    pub fn new(calculate: T) -> Cache<T> {
         Cache {
             calculate,
             value: None
         }
     }
 
-    fn value(&mut self, arg: u32) -> u32 {
+    pub fn value(&mut self, arg: u32) -> u32 {
         match self.value {
             Some(value) => value,
             None => {
@@ -26,12 +44,18 @@ impl<T> Cache<T>
     }
 }
 
-#[cfg(test)]
-mod test {
-    use super::*;
-
-    #[test]
-    fn test_1() {
-
-    }
-}
+// impl<T> Iterator for Cache<T>
+//     where T: Fn(u32) -> u32 {
+//     type Item = u32;
+//
+//     fn next(&mut self) -> Option<Self::Item> {
+//         let value = self.value.unwrap_or_else(|| 0);
+//         let new_value = self.value(value);
+//
+//         if new_value == 0 {
+//             None
+//         } else {
+//             Some(new_value)
+//         }
+//     }
+// }
