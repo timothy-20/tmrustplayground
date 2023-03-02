@@ -1,0 +1,9 @@
+[package]
+name = "tmrustplayground"
+version = "1.0.0"
+authors = ["timothy-20 <jungun3329@gmail.com>"]
+description = "rust를 이용한 알고리즘 학습을 위한 프로젝트입니다. 다양한 문제에 대한 해결 로직을 구현해 둘 예정입니다."
+license = "MIT OR Apache-2.0"
+edition = "2021"
+
+[dependencies]
