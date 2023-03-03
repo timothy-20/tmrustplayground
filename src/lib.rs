@@ -5,4 +5,5 @@
 
 pub mod cache;
 pub mod minigrep;
+pub mod smart_pointer;
 

@@ -1,10 +1,13 @@
 extern crate tmrustplayground;
 
 use std::{env, process};
-use std::fmt::Display;
-use std::ops::Deref;
+use std::cell::Cell;
 use tmrustplayground::{cache, minigrep};
 use tmrustplayground::minigrep::Config;
+
+use std::thread;
+use std::time:: Duration;
+use std::sync::mpsc;
 
 fn run_clt() {
     let config = Config::new(env::args()).unwrap_or_else(|error| {
@@ -18,35 +21,31 @@ fn run_clt() {
     }
 }
 
-struct TMBox<T>(T) where T: Display;
-
-impl<T> TMBox<T>
-    where T: Display {
-    fn new(x: T) -> TMBox<T> {
-        TMBox(x)
-    }
-}
-
-impl<T> Deref for TMBox<T>
-    where T: Display {
-    type Target = T;
-
-    fn deref(&self) -> &Self::Target {
-        &self.0
-    }
-}
-
-impl<T> Drop for TMBox<T>
-    where T: Display {
-    fn drop(&mut self) {
-        println!("Now drop the value. {}", self.0);
-    }
-}
-
 fn main() {
-    let message = TMBox::new(String::from("Rust"));
+    let (sender, receiver) = mpsc::channel();
 
-    println!("This is {}", message.0);
-    drop(message);
-    println!("Something occurred!");
+    for _ in 0..= 1 {
+        thread::spawn(move || {
+            let messages = vec![
+                String::from("Send message [1]"),
+                String::from("Send message [2]"),
+                String::from("Send message [3]"),
+                String::from("Send message [4]"),
+                String::from("Send message [5]"),
+            ];
+
+            for message in messages {
+                if let Err(error) = sender.send(message) {
+                    println!("Unable send to channel. Error description: {}", error);
+                    break
+                }
+
+                thread::sleep(Duration::from_secs_f32(0.5));
+            }
+        });
+    }
+
+    for receive_value in receiver {
+        println!("Result: {}", receive_value);
+    }
 }
